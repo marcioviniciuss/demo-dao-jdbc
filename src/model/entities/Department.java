@@ -4,8 +4,8 @@ import java.io.Serializable;
 import java.util.Objects;
 
 public class Department implements Serializable {
-    Integer id;
-    String name;
+    private Integer id;
+    private String name;
 
     public Department(){}
 
