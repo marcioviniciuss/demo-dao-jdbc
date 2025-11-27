@@ -53,3 +53,9 @@ bin/
 
 ### Mac OS ###
 .DS_Store
+
+
+# IntelliJ IDEA - nunca commitar essas pastas/arquivos
+.idea/
+*.iml
+*.iws
