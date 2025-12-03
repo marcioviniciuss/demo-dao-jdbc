@@ -38,5 +38,13 @@ public class Program {
         sellerDao.insert(newSeller);
         System.out.println("New seller inserted. Id = " + newSeller.getId());
         sc.close();
+
+        System.out.println("\n### Test 4 findByDepartment ###");
+        seller = sellerDao.findById(7);
+        seller.setName("Flavia Mendes");
+        seller.setEmail("flaviamendes@gmail.com");
+        seller.setBirthDate(new Date());
+        sellerDao.update(seller);
+        System.out.println("User updated.");
     }
 }
