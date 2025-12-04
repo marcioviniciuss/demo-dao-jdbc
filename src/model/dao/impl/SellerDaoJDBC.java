@@ -25,7 +25,9 @@ public class SellerDaoJDBC implements SellerDao {
         PreparedStatement st = null;
 
         try {
-            st = conn.prepareStatement("INSERT INTO seller\n" + "(Name, Email, BirthDate, BaseSalary, DepartmentId)\n" + "VALUES\n" + "(?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+            st = conn.prepareStatement("INSERT INTO seller\n" +
+                    "(Name, Email, BirthDate, BaseSalary, DepartmentId)\n" +
+                    "VALUES\n" + "(?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
 
             st.setString(1, obj.getName());
             st.setString(2, obj.getEmail());
@@ -82,8 +84,27 @@ public class SellerDaoJDBC implements SellerDao {
     }
 
     @Override
-    public void DeleteById(Integer id) {
+    public void deleteById(Integer id) {
+        PreparedStatement st = null;
+        ResultSet rs = null;
 
+        try {
+            st = conn.prepareStatement("DELETE FROM seller\n" +
+                    "WHERE Id = ?");
+
+            st.setInt(1, id);
+
+            int rowsAffected = st.executeUpdate();
+
+            if(rowsAffected == 0) {
+                throw new DbException("You tried to delete a user that doesn’t exist, so nothing will be done.");
+            }
+        } catch (SQLException e) {
+            throw new DbException(e.getMessage());
+        } finally {
+            DB.closeResultSet(rs);
+            DB.closeStatement(st);
+        }
     }
 
     @Override
