@@ -19,6 +19,32 @@ public class DepartmentDaoJDBC implements DepartmentDao {
 
     @Override
     public void insert(Department obj) {
+        PreparedStatement st = null;
+
+        try{
+            st = conn.prepareStatement("Insert Into Department (name)\n" +
+                    "values (?)", Statement.RETURN_GENERATED_KEYS);
+
+            st.setString(1, obj.getName());
+
+            int rowsAffected = st.executeUpdate();
+
+            if(rowsAffected > 0) {
+                ResultSet rs =  st.getGeneratedKeys();
+
+                if(rs.next()) {
+                    int id = rs.getInt(1);
+
+                    obj.setId(id);
+                } else {
+                    throw new DbException("Unexpected error! The query didn't run!");
+                }
+
+                DB.closeResultSet(rs);
+            }
+        } catch (SQLException e) {
+            throw new DbException(e.getMessage());
+        }
 
     }
 
@@ -34,7 +60,28 @@ public class DepartmentDaoJDBC implements DepartmentDao {
 
     @Override
     public Department findById(Integer id) {
-        return null;
+        PreparedStatement st = null;
+        ResultSet rs = null;
+
+        try{
+            st = conn.prepareStatement("select * \n" +
+                    "from Department\n" +
+                    "where id = ?");
+
+            st.setInt(1, id);
+            rs = st.executeQuery();
+
+            if(rs.next()) {
+                Department dep = instantiateDepartment(rs);
+                return dep;
+            }
+            return null;
+        } catch (SQLException e) {
+            throw new DbException(e.getMessage());
+        } finally {
+            DB.closeResultSet(rs);
+            DB.closeStatement(st);
+        }
     }
 
     @Override

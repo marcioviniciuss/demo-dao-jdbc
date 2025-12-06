@@ -60,9 +60,19 @@ public class Program {
         System.out.println("\n==========================================================\n");
 
         System.out.println("** PART 2 Departments **");
+
+        System.out.println("\n### Test 1 findById ###");
+        DepartmentDao departmentDao = DaoFactory.createDepartmentDao();
+        department = departmentDao.findById(3);
+        System.out.println(department);
+
+        System.out.println("\n### Test 2 insert ###");
+        department = new Department(null, "Cosmetics");
+        departmentDao.insert(department);
+        System.out.println("New department inserted. Id = " + department.getId());
+
         System.out.println("\n### Test 3 findAll ###");
 
-        DepartmentDao departmentDao = DaoFactory.createDepartmentDao();
         List<Department> departmentList = departmentDao.findAll();
 
         for(Department dep : departmentList) {
